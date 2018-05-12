@@ -1,0 +1,4 @@
+{
+  "handler": "crawler.handle",
+  "timeout": 60
+}
