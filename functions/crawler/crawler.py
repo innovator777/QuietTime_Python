@@ -21,7 +21,9 @@ def handle(response, context):
   # API Gateway 에선 람다에서 받은 스트링을 카톡이 원하는 형태의 json 으로 변환해 카톡으로 응답 반환
 
   # message = "Test Message"
-  # slack.send_message(os.environ['CHANNEL_ID'], message)
+  kst_now = dynamodb.get_kst_now()
+  date_key = dynamodb.generate_date_key(kst_now)
+  slack.send_message(os.environ['CHANNEL_ID'], '%s %s' % (date_key, u'데이터 저장 완료'))
 
   return { 'status': 200 }
 
