@@ -1,0 +1,4 @@
+{
+  "handler": "chatbot.handle",
+  "timeout": 60
+}

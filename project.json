@@ -1,0 +1,11 @@
+{
+  "name": "quiettime",
+  "description": "",
+  "nameTemplate": "{{.Project.Name}}-{{.Function.Name}}",
+  "profile": "apex",
+  "runtime": "python2.7",
+  "memory": 128,
+  "timeout": 5,
+  "role": "arn:aws:iam::141791232033:role/QuietTime_lambda_function",
+  "environment": {}
+}
