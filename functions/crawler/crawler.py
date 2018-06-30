@@ -3,7 +3,7 @@ import os
 from time import sleep
 
 import slack
-# import dynamodb
+import dynamodb
 # import const
 import extract
 import env
@@ -27,11 +27,6 @@ def handle(response, context):
   options.add_argument("--homedir=/tmp")
   options.binary_location = "./bin/headless_chromium"
 
-  # driver = webdriver.Chrome("./bin/chromedriver", chrome_options=options)
-  # driver.get("https://www.google.co.kr")
-  # title = driver.title
-  # driver.close()
-
   driver = webdriver.Chrome("./bin/chromedriver", chrome_options=options)
   driver.implicitly_wait(3)
   driver.get('http://www.duranno.com/qt/default.asp?CAT=020200')
@@ -45,7 +40,9 @@ def handle(response, context):
 
   driver.close()
 
-  mainTitle = extract.getMainTitle(soup)
+  todaysWord = getTodaysWord(soup)
+  todaysCommentary = getTodaysCommentary(soup)
+
 
   # 카톡에서 보낸 키워드를 API Gateway 응답에서 가져 온 뒤
 
@@ -54,21 +51,41 @@ def handle(response, context):
   # 디비에서 데이터를 가져 와서
 
   # 카톡으로 반환할 텍스트를 포매팅한 뒤 반환
-  # living_life_qt_table = dynamodb.get_living_life_qt_table()
+  living_life_qt_table = dynamodb.get_living_life_qt_table()
 
   # 사이트에 따라 테이블은 구분하고 같은 자료 구조로 삽입
-  # dynamodb.insert_qt(living_life_qt_table, mainTitle)
+  dynamodb.insert_qt(living_life_qt_table, todaysWord, todaysCommentary)
 
   # API Gateway 에선 람다에서 받은 스트링을 카톡이 원하는 형태의 json 으로 변환해 카톡으로 응답 반환
 
   # message = "Test Message"
   # kst_now = dynamodb.get_kst_now()
   # date_key = dynamodb.generate_date_key(kst_now)
-  slack.send_message(env.getChannelId(), '%s %s' % (mainTitle, u'크롤링 완료'))
 
-  return { 'message':
-    { 'text': mainTitle }
-  }
+  # slack.send_message(env.getChannelId(), '%s %s' % (mainTitle + "\n", u'mainTitle'))
+  slack.send_message(env.getChannelId(), '%s' % (todaysWord))
+  slack.send_message(env.getChannelId(), '%s' % (todaysCommentary))
+
+
+  return { 'status': 200 }
+
+def getTodaysWord(soup):
+  mainTitle = extract.getMainTitle(soup)
+  allVerse = extract.getAllVerse(soup)
+  praise = extract.getPraise(soup)
+  helper = extract.getHelper(soup)
+  mainText = ' '.join(extract.getMainText(soup)) # list to string
+
+  return mainTitle + '\n' + allVerse + '\n' + praise + '\n' + mainText + '\n' + helper
+
+def getTodaysCommentary(soup):
+  mainTitle = extract.getMainTitle(soup)
+  allVerse = extract.getAllVerse(soup)
+  summary = extract.getSummary(soup)
+  commentary = ' '.join(extract.getCommentary(soup)) #list to string
+  prayer = extract.getPrayer(soup)
+
+  return mainTitle + '\n' + allVerse + '\n' + summary + '\n' + commentary + prayer
 
 if __name__ == '__main__':
   handle(None, None)
