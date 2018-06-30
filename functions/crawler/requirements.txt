@@ -3,3 +3,5 @@ requests
 boto3  # DynamoDB
 datetime
 pytz
+selenium
+bs4
