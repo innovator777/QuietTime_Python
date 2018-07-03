@@ -9,21 +9,22 @@ import const
 def get_db():
   return boto3.resource('dynamodb')
 
+#living_life_qt
 def get_living_life_qt_table():
   dynamodb = get_db()
   return dynamodb.Table('Living_Life_QT_Table')
 
-def insert_qt(table, todaysWord, todaysCommentary):
+def insert_living_life_qt(table, data, commentary):
   kst_now = get_kst_now()
   date_key = generate_date_key(kst_now)
 
   table.put_item(Item={
     const.KEY_DATE: date_key,
-    'todaysword': todaysWord,
-    'todaysCommentary': todaysCommentary
+    const.KEY_LIVING_LIFE_DATA: data,
+    const.KEY_LIVING_LIFE_COMM: commentary
   })
 
-def query_qt(table):
+def query_living_life_qt(table):
   kst_now = get_kst_now()
   date_key = generate_date_key(kst_now)
   filter_exp = Key(const.KEY_DATE).eq(date_key)

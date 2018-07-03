@@ -1,30 +1,43 @@
 # -*- coding: utf-8 -*-
 import os
 import requests
+from json import loads, dumps
+import re
 
 import const
 import slack
 import dynamodb
+import answer
+import kw
 
 def handle(response, context):
-  # 카톡에서 보낸 키워드를 API Gateway 응답에서 가져 온 뒤
+  if response:
+    content = response['content']
+    user_key = response['user_key']
 
-  # 키워드에 따라 가져올 디비 테이블 결정한 뒤
+    if content == kw.getTodaysQTMainTitle():
+      return answer.getQTChoice()
 
-  # 디비에서 데이터를 가져 와서
-  living_life_qt_table = dynamodb.get_living_life_qt_table()
-  qt_data = dynamodb.query_qt(living_life_qt_table)
+    elif content == kw.getLLQTMainTitle():
+      return answer.getLLQTChoice()
 
-  # 카톡으로 반환할 텍스트를 포매팅한 뒤 반환
+    elif content == kw.getLLQTSubTitle():
+      living_life_qt_table = dynamodb.get_living_life_qt_table()
+      data = dynamodb.query_living_life_qt(living_life_qt_table)
+      return answer.getLLQT(data[const.KEY_LIVING_LIFE_DATA])
 
-  date = qt_data['date']
-  text = qt_data['text']
+    elif content == kw.getLLQTCommentary():
+      living_life_qt_table = dynamodb.get_living_life_qt_table()
+      data = dynamodb.query_living_life_qt(living_life_qt_table)
+      return answer.getLLQT(data[const.KEY_LIVING_LIFE_COMM])
 
-  # API Gateway 에선 람다에서 받은 스트링을 카톡이 원하는 형태의 json 으로 변환해 카톡으로 응답 반환
+    elif content == kw.getHome():
+      return answer.getMain()
 
-  message = '%s : %s' % (date, text)
-  slack.send_message(os.environ['CHANNEL_ID'], message)
+    else :
+      return answer.getMain()
+
   return { 'status': 200 }
 
-if __name__ == '__main__':
-  handle(None, None)
+# if __name__ == '__main__':
+#   handle(None, None)
