@@ -31,6 +31,11 @@ def handle(response, context):
       data = dynamodb.query_living_life_qt(living_life_qt_table)
       return answer.getLLQT(data[const.KEY_LIVING_LIFE_COMM])
 
+    elif content == kw.getDBQTMainTitle():
+      daily_bible_qt_table = dynamodb.get_daily_bible_qt_table()
+      data = dynamodb.query_daily_bible_qt(daily_bible_qt_table)
+      return answer.getDBQT(data[const.KEY_DAILY_BIBLE_DATA])
+
     elif content == kw.getHome():
       return answer.getMain()
 

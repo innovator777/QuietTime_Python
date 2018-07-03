@@ -31,6 +31,28 @@ def query_living_life_qt(table):
   response = table.scan(FilterExpression=filter_exp)
   return response['Items'][0]
 
+#daily_bible_qt
+def get_daily_bible_qt_table():
+  dynamodb = get_db()
+  return dynamodb.Table('Daily_Bible_QT_Table')
+
+def insert_daily_bible_qt(table, data):
+  kst_now = get_kst_now()
+  date_key = generate_date_key(kst_now)
+
+  table.put_item(Item={
+    const.KEY_DATE: date_key,
+    const.KEY_DAILY_BIBLE_DATA: data,
+  })
+
+def query_daily_bible_qt(table):
+  kst_now = get_kst_now()
+  date_key = generate_date_key(kst_now)
+  filter_exp = Key(const.KEY_DATE).eq(date_key)
+  response = table.scan(FilterExpression=filter_exp)
+  return response['Items'][0]
+
+
 
 
 # Date
