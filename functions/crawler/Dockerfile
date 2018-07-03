@@ -7,4 +7,5 @@ ADD . .
 
 CMD pip install -r requirements.txt -t $APP_DIR && \
   zip -9 deploy_crawler.zip living_life_crawler.py && \
+  zip -9 deploy_crawler.zip daily_bible_crawler.py && \
   zip -r9 deploy_crawler.zip *
