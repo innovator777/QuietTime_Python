@@ -50,8 +50,58 @@ def query_daily_bible_qt(table):
   date_key = generate_date_key(kst_now)
   filter_exp = Key(const.KEY_DATE).eq(date_key)
   response = table.scan(FilterExpression=filter_exp)
-  return response['Items'][0]
+  if response['Items'] is None or not response['Items']:
+    return None
+  else:
+    return response['Items'][0]
 
+
+# user_table
+def get_user_table():
+  dynamodb = get_db()
+  return dynamodb.Table('User_Table')
+
+def insert_user(table, user_key, user_info):
+  table.put_item(Item={
+    const.KEY_USER_KEY: user_key,
+    const.KEY_USER_INFO: user_info,
+    const.KEY_USER_ADMISSION: 'FALSE'
+  })
+
+def query_target_user(table, user_key):
+  filter_exp = Key(const.KEY_USER_KEY).eq(user_key)
+  response = table.scan(FilterExpression=filter_exp)
+  if response['Items'] is None or not response['Items']:
+    return None
+  else :
+    return response['Items'][0]
+
+def query_wait_user(table):
+  filter_exp = Attr(const.KEY_USER_ADMISSION).eq('FALSE')
+  response = table.scan(FilterExpression=filter_exp)
+  if response['Items'] is None or not response['Items']:
+    return None
+  else :
+    return response['Items']
+
+def query_approve_user(table):
+  filter_exp = Attr(const.KEY_USER_ADMISSION).eq('TRUE')
+  response = table.scan(FilterExpression=filter_exp)
+  if response['Items'] is None or not response['Items']:
+    return None
+  else :
+    return response['Items']
+
+
+def update_user(table, user_key, user_admission):
+  table.update_item(
+    Key={
+        const.KEY_USER_KEY: user_key,
+    },
+    UpdateExpression='SET user_admission = :val',
+    ExpressionAttributeValues={
+        ':val': user_admission
+    })
 
 
 
