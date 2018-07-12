@@ -27,7 +27,7 @@ def handle(response, context):
 
         admission = user_data[const.KEY_USER_ADMISSION]
         if admission == 'TRUE':
-          return answer.getDBQTChoice()
+          return answer.getQTChoice()
         else:
           return answer.getDisapprovedUserCase()
       else:
@@ -35,6 +35,25 @@ def handle(response, context):
 
     elif content == kw.getAdminFunction():
       return answer.getAdminMode()
+
+    elif content == kw.getLLQTMainTitle():
+      return answer.getLLQTChoice()
+
+    elif content == kw.getLLQTSubTitle():
+      living_life_qt_table = dynamodb.get_living_life_qt_table()
+      data = dynamodb.query_living_life_qt(living_life_qt_table)
+      if data is None:
+        return answer.getLLQT(data)
+      else:
+        return answer.getLLQT(data[const.KEY_LIVING_LIFE_DATA])
+
+    elif content == kw.getLLQTCommentary():
+      living_life_qt_table = dynamodb.get_living_life_qt_table()
+      data = dynamodb.query_living_life_qt(living_life_qt_table)
+      if data is None:
+        return answer.getLLQT(data)
+      else:
+        return answer.getLLQT(data[const.KEY_LIVING_LIFE_COMM])
 
     elif content == kw.getDBQTMainTitle():
       daily_bible_qt_table = dynamodb.get_daily_bible_qt_table()
@@ -94,14 +113,12 @@ def handle(response, context):
                 return answer.getMain()
             else:
               return answer.getEnterIncorrectlyWord()
-          else:
-            return answer.getWrongAccess()
         else:
-          dynamodb.insert_user(user_table, user_key, content)
-          slack.send_message(os.environ['CHANNEL_ID'], '%s : %s' % (user_key, content))
-          return answer.getApplyQuietTime()
+          return answer.getWrongAccess()
       else:
-        return answer.getWrongAccess()
+        dynamodb.insert_user(user_table, user_key, content)
+        slack.send_message(os.environ['CHANNEL_ID'], '%s : %s' % (user_key, content))
+        return answer.getApplyQuietTime()
 
 
   return { 'status': 200 }

@@ -92,22 +92,36 @@ def getDisapprovedUserCase():
   }
 
 def getLLQT(text):
-  return {
-    'message': {
-      'text': text
-    },
-    'keyboard': {
-      'type': 'buttons',
-      'buttons': [kw.getLLQTSubTitle(), kw.getLLQTCommentary(), kw.getHome()]
+  if getDataIsNoneDistinction(text):
+    return {
+      'message': {
+        'text': '오늘의 큐티가 없습니다.\n' +
+                '매일 12시 2~3분부터 이용 가능합니다. \n' +
+                '이용에 문제가 있는경우 관리자에게 연락바랍니다.'
+      },
+      'keyboard': {
+        'type': 'buttons',
+        'buttons': [kw.getLLQTSubTitle(), kw.getLLQTCommentary(), kw.getHome()]
+      }
     }
-  }
+  else :
+    return {
+      'message': {
+        'text': text
+      },
+      'keyboard': {
+        'type': 'buttons',
+        'buttons': [kw.getLLQTSubTitle(), kw.getLLQTCommentary(), kw.getHome()]
+      }
+    }
 
 def getDBQT(text):
   if getDataIsNoneDistinction(text):
     return {
       'message': {
         'text': '오늘의 큐티가 없습니다.\n' +
-                '매일 12시 2분 이후부터 이용 가능합니다.'
+                '매일 12시 2~3분부터 이용 가능합니다. \n' +
+                '이용에 문제가 있는경우 관리자에게 연락바랍니다.'
       },
       'keyboard': {
         'type': 'buttons',
@@ -132,7 +146,7 @@ def getAdmin():
     },
     'keyboard': {
       'type': 'buttons',
-      'buttons': [kw.getDBQTMainTitle(), kw.getAdminFunction(), kw.getHome()]
+      'buttons': [kw.getLLQTMainTitle(), kw.getDBQTMainTitle(), kw.getAdminFunction(), kw.getHome()]
     }
   }
 

@@ -29,7 +29,10 @@ def query_living_life_qt(table):
   date_key = generate_date_key(kst_now)
   filter_exp = Key(const.KEY_DATE).eq(date_key)
   response = table.scan(FilterExpression=filter_exp)
-  return response['Items'][0]
+  if response['Items'] is None or not response['Items']:
+    return None
+  else:
+    return response['Items'][0]
 
 #daily_bible_qt
 def get_daily_bible_qt_table():
