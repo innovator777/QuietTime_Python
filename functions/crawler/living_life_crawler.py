@@ -4,7 +4,6 @@ from time import sleep
 
 import slack
 import dynamodb
-# import const
 import living_life_extract
 import env
 from selenium import webdriver
