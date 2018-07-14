@@ -172,6 +172,17 @@ def getUserStateChangeMode():
     }
   }
 
+def getUserStateChangeResult(text):
+  return {
+    'message': {
+      'text' : text
+    },
+    'keyboard': {
+      'type': 'buttons',
+      'buttons': [kw.getTodaysQTMainTitle()]
+    }
+  }
+
 def getEnterIncorrectlyWord():
   return {
     'message': {
