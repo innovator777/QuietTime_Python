@@ -69,7 +69,9 @@ def getScripture(soup):
   bible_con = soup.find_all('div', class_='bible_con')
 
   for target in bible_con:
-    result.append(target.text.rstrip())
+    removeTap = re.sub('[\t]', '', target.text)
+    removeNewLine = re.sub('[\n]', ' ', removeTap)
+    result.append(removeNewLine + '\n')
 
   return result
 
@@ -103,6 +105,7 @@ def arrangementMainText(subTitles, scriptures):
   for target in subTitles:
     target.rstrip()
     result.append(target)
+    result.append('\n')
     data = regex.search(target)
     if data :
       result.extend(extractVerses(data.group(1), data.group(2), scriptures))
