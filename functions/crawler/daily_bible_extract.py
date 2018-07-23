@@ -34,7 +34,7 @@ def getScripture(soup):
   scripture = soup.select("#searchVO > ul.story_view > li > table")
 
   for target in scripture:
-    result.append(target.text.rstrip())
+    result.append(re.sub('[\n]', ' ', target.text))
 
   return ' '.join(result)
 
@@ -43,7 +43,7 @@ def getCommentary(soup):
   commentary = soup.select("#searchVO > ul.story_view > li > p.book_line2")
   result.append(word.getCommentary())
   for target in commentary:
-    result.append(re.sub(' +', ' ', target.text).strip())
+    result.append(re.sub('[\t]', '', target.text).strip())
 
   return ' '.join(result)
 
@@ -51,7 +51,7 @@ def getCommentaryText(soup):
   result = list()
   commentaryText = soup.select("#bibleTxt")
   for target in commentaryText:
-    result.append(re.sub(' +', ' ', target.text).strip())
+    result.append(re.sub('[\t]', '', target.text).strip())
 
   return ' '.join(result)
 
