@@ -50,7 +50,7 @@ def getDBQTChoice():
 def getUnappliedUserCase():
   return {
     'message': {
-      'text': '서비스 사용 신청이 되지 않은 분이시군요, 서비스를 이용하기 위해서는 서비스 사용 신청을 진행해 주시기 바랍니다.'
+      'text': '서비스를 이용하기 위해서는 서비스 사용 신청을 진행해 주시기 바랍니다.'
     },
     'keyboard': {
       'type': 'buttons',
