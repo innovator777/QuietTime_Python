@@ -29,7 +29,7 @@ def handle(response, context):
 
   driver = webdriver.Chrome("./bin/chromedriver", chrome_options=options)
   driver.implicitly_wait(3)
-  driver.get('http://www.su.or.kr/03bible/daily/qtView.do?qtType=QT1')
+  driver.get(env.getDailyBiblePath())
   sleep(3)
 
   html = driver.page_source
