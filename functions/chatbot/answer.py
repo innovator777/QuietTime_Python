@@ -43,7 +43,7 @@ def getDBQTChoice():
     },
     'keyboard': {
       'type': 'buttons',
-      'buttons': [kw.getDBQTMainTitle(), kw.getHome()]
+      'buttons': [kw.getDBQTBasicTitle(), kw.getDBQTSoonTitle(), kw.getHome()]
     }
   }
 
@@ -111,7 +111,7 @@ def getDBQT(text):
       },
       'keyboard': {
         'type': 'buttons',
-        'buttons': [kw.getDBQTMainTitle(), kw.getHome()]
+        'buttons': [kw.getDBQTBasicTitle(), kw.getDBQTSoonTitle(), kw.getHome()]
       }
     }
   else :
@@ -121,7 +121,7 @@ def getDBQT(text):
       },
       'keyboard': {
         'type': 'buttons',
-        'buttons': [kw.getDBQTMainTitle(), kw.getHome()]
+        'buttons': [kw.getDBQTBasicTitle(), kw.getDBQTSoonTitle(), kw.getHome()]
       }
     }
 
