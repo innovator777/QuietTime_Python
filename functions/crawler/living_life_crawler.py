@@ -28,7 +28,7 @@ def handle(response, context):
 
   driver = webdriver.Chrome("./bin/chromedriver", chrome_options=options)
   driver.implicitly_wait(3)
-  driver.get('http://www.duranno.com/qt/default.asp?CAT=020200')
+  driver.get(env.getLivingLifePath())
   sleep(3)
   driver.implicitly_wait(3)
   driver.find_element_by_xpath('//*[@id="project_detail"]/div[2]/ul/ul/li[3]/a').click()
