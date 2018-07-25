@@ -39,6 +39,9 @@ def handle(response, context):
     elif content == kw.getLLQTMainTitle():
       return answer.getLLQTChoice()
 
+    elif content == kw.getDBQTMainTitle():
+      return answer.getDBQTChoice()
+
     elif content == kw.getLLQTSubTitle():
       living_life_qt_table = dynamodb.get_living_life_qt_table()
       data = dynamodb.query_living_life_qt(living_life_qt_table)
@@ -55,13 +58,18 @@ def handle(response, context):
       else:
         return answer.getLLQT(data[const.KEY_LIVING_LIFE_COMM])
 
-    elif content == kw.getDBQTMainTitle():
+    elif content == kw.getDBQTBasicTitle():
       daily_bible_qt_table = dynamodb.get_daily_bible_qt_table()
       data = dynamodb.query_daily_bible_qt(daily_bible_qt_table)
       if data is None:
         return answer.getDBQT(data)
       else:
         return answer.getDBQT(data[const.KEY_DAILY_BIBLE_DATA])
+
+    elif content == kw.getDBQTSoonTitle():
+      daily_bible_qt_table = dynamodb.get_daily_bible_qt_table()
+      data = dynamodb.query_daily_bible_qt(daily_bible_qt_table)
+      return answer.getDBQT(data[const.KEY_DAILY_BIBLE_SOON])
 
     elif content == kw.getHome():
       return answer.getMain()

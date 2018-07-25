@@ -39,13 +39,14 @@ def get_daily_bible_qt_table():
   dynamodb = get_db()
   return dynamodb.Table('Daily_Bible_QT_Table')
 
-def insert_daily_bible_qt(table, data):
+def insert_daily_bible_qt(table, data, soon):
   kst_now = get_kst_now()
   date_key = generate_date_key(kst_now)
 
   table.put_item(Item={
     const.KEY_DATE: date_key,
     const.KEY_DAILY_BIBLE_DATA: data,
+    const.KEY_DAILY_BIBLE_SOON: soon,
   })
 
 def query_daily_bible_qt(table):
