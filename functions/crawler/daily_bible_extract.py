@@ -43,7 +43,18 @@ def getCommentary(soup):
   commentary = soup.select("#searchVO > ul.story_view > li > p.book_line2")
   result.append(word.getCommentary())
   for target in commentary:
-    result.append(re.sub('[\t]', '', target.text).strip())
+    text = re.sub('[\t]', '', target.text)
+    if u'성경 이해' in text:
+      length = len(u'성경 이해')
+      index = text.find(u'성경 이해')
+      commentaryText = text[:index]
+      understandingTitle = text[index:index + length]
+      understandingText = text[index +length:]
+      result.append(commentaryText.strip())
+      result.append('\n' + understandingTitle + ' : ')
+      result.append(understandingText)
+    else:
+      result.append(text.strip())
 
   return ' '.join(result)
 
