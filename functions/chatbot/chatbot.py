@@ -112,13 +112,13 @@ def handle(response, context):
           if admin == 'TRUE':
             target_user_data = dynamodb.query_target_user(user_table, content)
             if target_user_data:
-              admission = user_data[const.KEY_USER_ADMISSION]
+              admission = target_user_data[const.KEY_USER_ADMISSION]
               if admission == 'FALSE':
                 dynamodb.update_user(user_table, content, 'TRUE')
-                return answer.getUserStateChangeResult(content + 'FALSE -> TRUE')
+                return answer.getUserStateChangeResult(content + ' : FALSE -> TRUE')
               else:
                 dynamodb.update_user(user_table, content, 'FALSE')
-                return answer.getUserStateChangeResult(content + 'TRUE -> FALSE')
+                return answer.getUserStateChangeResult(content + ' : TRUE -> FALSE')
             else:
               return answer.getEnterIncorrectlyWord()
         else:
