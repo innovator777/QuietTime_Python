@@ -7,7 +7,7 @@ import word
 
 def getMainTitle(soup):
   result = list()
-  title = soup.select("#searchVO > ul.story_view > li > p.subject")
+  title = soup.select("#bible_text")
   for target in title:
     result.append(target.text)
 
@@ -15,7 +15,7 @@ def getMainTitle(soup):
 
 def getPraise(soup):
   result = list()
-  praise = soup.select("#searchVO > ul.story_view > li > p.book_num > a")
+  praise = soup.select("#bibleinfo_box")
   for target in praise:
     result.append(target.text)
 
@@ -23,7 +23,7 @@ def getPraise(soup):
 
 def getAllVerse(soup):
   result = list()
-  verse = soup.select("#searchVO > ul.story_view > li > p.book_line")
+  verse = soup.select("#body_list > li")
   for target in verse:
     result.append(target.text)
 
@@ -31,38 +31,10 @@ def getAllVerse(soup):
 
 def getScripture(soup):
   result = list()
-  scripture = soup.select("#searchVO > ul.story_view > li > table")
+  scripture = soup.select("#body_cont_3 > div")
 
   for target in scripture:
     result.append(re.sub('[\n]', ' ', target.text))
-
-  return ' '.join(result)
-
-def getCommentary(soup):
-  result = list()
-  commentary = soup.select("#searchVO > ul.story_view > li > p.book_line2")
-  result.append(word.getCommentary())
-  for target in commentary:
-    text = re.sub('[\t]', '', target.text)
-    if u'성경 이해' in text:
-      length = len(u'성경 이해')
-      index = text.find(u'성경 이해')
-      commentaryText = text[:index]
-      understandingTitle = text[index:index + length]
-      understandingText = text[index +length:]
-      result.append(commentaryText.strip())
-      result.append('\n' + understandingTitle + ' : ')
-      result.append(understandingText)
-    else:
-      result.append(text.strip())
-
-  return ' '.join(result)
-
-def getCommentaryText(soup):
-  result = list()
-  commentaryText = soup.select("#bibleTxt")
-  for target in commentaryText:
-    result.append(re.sub('[\t]', '', target.text).strip())
 
   return ' '.join(result)
 
