@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 
 def handle(response, context):
   todaysQuietTime = getTodaysQuiteTime(getSoup(env.getDailyBiblePath()))
-  todaysQuietTimeSoon = getTodaysQuiteTime(getSoup(env.getDailyBibleSoonPath()))
+  todaysQuietTimeSoon = getTodaysQuiteTime(getSoup(env.getDailyBiblePath(), 'soon'))
 
   daily_bible_qt_table = dynamodb.get_daily_bible_qt_table()
   dynamodb.insert_daily_bible_qt(daily_bible_qt_table, todaysQuietTime, todaysQuietTimeSoon)
@@ -21,7 +21,7 @@ def handle(response, context):
 
   return { 'status': 200 }
 
-def getSoup(path):
+def getSoup(path, type='basic'):
   options = webdriver.ChromeOptions()
   options.add_argument("--headless")
   options.add_argument("--disable-gpu")
@@ -42,6 +42,16 @@ def getSoup(path):
   driver.implicitly_wait(3)
   driver.get(path)
   sleep(3)
+  driver.implicitly_wait(3)
+
+  if type == 'soon':
+    driver.find_element_by_xpath('/html/body/div[5]/div[2]/div[1]/ul/li[2]/div[1]').click()
+    sleep(3)
+    driver.implicitly_wait(3)
+
+  driver.find_element_by_xpath('//*[@id="mainTitle_3"]').click()
+  sleep(3)
+  driver.implicitly_wait(3)
 
   html = driver.page_source
   soup = BeautifulSoup(html, 'html.parser')
@@ -53,12 +63,10 @@ def getSoup(path):
 def getTodaysQuiteTime(soup):
   mainTitle = daily_bible_extract.getMainTitle(soup)
   praise = daily_bible_extract.getPraise(soup)
-  verse = daily_bible_extract.getExtractVerse(soup)
+  verse = daily_bible_extract.getAllVerse(soup)
   scripture = daily_bible_extract.getScripture(soup)
-  commentary = daily_bible_extract.getCommentary(soup)
-  commentaryText = daily_bible_extract.getCommentaryText(soup)
 
-  return mainTitle + '\n\n' + praise + '\n\n' + verse + '\n\n' + scripture + '\n\n' + commentary + '\n\n' + commentaryText
+  return mainTitle + '\n\n' + praise + '\n\n' + verse + '\n\n' + '해설 : ' + scripture
 
 
 if __name__ == '__main__':
