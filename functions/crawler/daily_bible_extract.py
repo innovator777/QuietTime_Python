@@ -17,15 +17,23 @@ def getPraise(soup):
   result = list()
   praise = soup.select("#bibleinfo_box")
   for target in praise:
-    result.append(target.text)
+    result.append(target.text) 
 
   return ' '.join(result)
 
 def getAllVerse(soup):
   result = list()
+  regex = re.compile(r'(\d+)')
   verse = soup.select("#body_list > li")
   for target in verse:
-    result.append(target.text)
+    data = regex.search(target.text)
+
+    if data:
+      length = len(data.group(1))
+      number = target.text[:length]
+      text = target.text[length:]
+
+    result.append(number + ' ' + text + '\n')
 
   return ' '.join(result)
 
